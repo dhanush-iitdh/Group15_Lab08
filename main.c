@@ -18,3 +18,11 @@ void GPIO_PORT_F_init(void) {
     GPIO_PORTF_IEV_R = 0x00;                   /* Trigger on falling edge */
     GPIO_PORTF_IM_R |= 0x11;                   /* Unmask interrupts on PF0 and PF4 */
 }
+void GPIO_PORT_B_init(void) {
+    SYSCTL_RCGCGPIO_R |= 0x02;                 /* Enable clock for Port B */
+    SYSCTL_RCGCUART_R |= 0x02;                 /* Enable clock for UART1 */
+
+    GPIO_PORTB_DEN_R |= 0x03;                  /* Enable digital functionality for PB0 and PB1 */
+    GPIO_PORTB_AFSEL_R |= 0x03;                /* Set alternate functions for PB0, PB1 */
+    GPIO_PORTB_PCTL_R = (GPIO_PORTB_PCTL_R & 0xFFFFFF00) | 0x00000011; /* Configure PB0, PB1 for UART */
+}
