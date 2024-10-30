@@ -44,9 +44,20 @@ char UART1_READ(void) {
     while (UART1_FR_R & 0x10);                 /* Wait if receive FIFO is empty */
     return (char)UART1_DR_R;                   /* Return received data */
 }
-// Handle received UART data and control LEDs
+/* Handle received UART data and control LEDs */
 void UART1_RXTX_to_DISPLAY(char RX_DATA) {
-   
+   if (RX_DATA == 'R') {
+        GPIO_PORTF_DATA_R = (GPIO_PORTF_DATA_R & ~0x0E) | 0x02; /* Turn on RED LED */
+    } else if (RX_DATA == 'B') {
+        GPIO_PORTF_DATA_R = (GPIO_PORTF_DATA_R & ~0x0E) | 0x04; /* Turn on BLUE LED */
+    } else if (RX_DATA == 'G') {
+        GPIO_PORTF_DATA_R = (GPIO_PORTF_DATA_R & ~0x0E) | 0x08; /* Turn on GREEN LED */
+    } else {
+        GPIO_PORTF_DATA_R &= ~0x0E;            /* Turn off all LEDs for unrecognized characters */
+    }
+    UART1_WRITE(RX_DATA);                      /* Echo received data back */
+}
+ 
 int main(void) {
     GPIO_PORT_F_init();                        /* Initialize Port F */
     GPIO_PORT_B_init();                        /* Initialize Port B and UART */
