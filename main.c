@@ -25,4 +25,12 @@ void GPIO_PORT_B_init(void) {
     GPIO_PORTB_DEN_R |= 0x03;                  /* Enable digital functionality for PB0 and PB1 */
     GPIO_PORTB_AFSEL_R |= 0x03;                /* Set alternate functions for PB0, PB1 */
     GPIO_PORTB_PCTL_R = (GPIO_PORTB_PCTL_R & 0xFFFFFF00) | 0x00000011; /* Configure PB0, PB1 for UART */
+
+ UART1_CTL_R &= ~0x01;                      /* Disable UART1 during configuration */
+    UART1_IBRD_R = 104;                        /* Baud rate integer divisor for 9600 baud */
+    UART1_FBRD_R = 11;                         /* Baud rate fractional divisor */
+    UART1_LCRH_R = 0x62;                       /* Set data length to 8-bit, odd parity, 1 stop bit */
+    UART1_CC_R = 0x00;                         /* Use system clock */
+
+    UART1_CTL_R |= 0x301;                      /* Enable UART1, RX and TX */
 }
