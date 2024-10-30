@@ -44,3 +44,14 @@ char UART1_READ(void) {
     while (UART1_FR_R & 0x10);                 /* Wait if receive FIFO is empty */
     return (char)UART1_DR_R;                   /* Return received data */
 }
+// Handle received UART data and control LEDs
+void UART1_RXTX_to_DISPLAY(char RX_DATA) {
+   
+int main(void) {
+    GPIO_PORT_F_init();                        /* Initialize Port F */
+    GPIO_PORT_B_init();                        /* Initialize Port B and UART */
+
+    while (1) {
+        UART1_RXTX_to_DISPLAY(UART1_READ());   /* Process received data to control LEDs and echo back */
+    }
+}
