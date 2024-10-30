@@ -38,3 +38,9 @@ void UART1_WRITE(char data) {
     while (UART1_FR_R & 0x20);                 /* Wait if transmit FIFO is full */
     UART1_DR_R = data;                         /* Write data to data register */
 }
+
+/* Read data from UART1 */
+char UART1_READ(void) {
+    while (UART1_FR_R & 0x10);                 /* Wait if receive FIFO is empty */
+    return (char)UART1_DR_R;                   /* Return received data */
+}
